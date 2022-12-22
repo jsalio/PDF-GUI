@@ -1,4 +1,13 @@
 <div class="main-container">
     <app-header></app-header>
-    <app-menu></app-menu>
+    <div class="content-container">
+        <div class="content-area">
+            <div class="content-area">
+                <ng-content></ng-content>
+            </div>
+        </div>
+        <nav class="sidenav">
+            <app-menu></app-menu>
+        </nav>
+    </div>
 </div>

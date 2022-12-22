@@ -6,5 +6,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent {
-
+  menu = [{
+    option: 'Dashboard',
+    link: '/dashboard'
+  },
+  {
+    option: 'Queue',
+    link: '/queue'
+  }, {
+    option: 'Configuration',
+    link: '/config'
+  }]
 }
