@@ -3,6 +3,6 @@
     <select clrSelect name="options" [(ngModel)]="_option" required>
         <option *ngFor="let op of options" [value]="op.value">{{op.label}}</option>
     </select>
-    <clr-control-helper>Helper text</clr-control-helper>
-    <clr-control-error>This field is required!</clr-control-error>
+    <!-- <clr-control-helper>Helper text</clr-control-helper>
+    <clr-control-error>This field is required!</clr-control-error> -->
 </clr-select-container>

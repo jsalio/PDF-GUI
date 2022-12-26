@@ -1,5 +1,5 @@
-import { Component, forwardRef, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, forwardRef, ElementRef, Input, Self } from '@angular/core';
+import { NgControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Option } from '../selector/selector.component';
 
 @Component({
@@ -17,7 +17,9 @@ export class RadioListComponent {
   @Input() label: string = "";
   _option: Option<{}> = {} as any
 
-  constructor() { }
+  constructor() {
+
+  }
 
   ngOnInit(): void {
 
