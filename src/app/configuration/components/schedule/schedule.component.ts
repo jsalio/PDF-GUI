@@ -1,38 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { TimeUnit } from 'src/app/shared/models/TimeUnit';
 import { WorkMode } from "src/app/shared/models/WorkMode";
 import { TimerOption } from "src/app/shared/models/TimerOption";
 import { Option } from 'src/app/shared/selector/selector.component';
 import { EnumToList } from 'src/app/shared/utils/enumToList';
+import { LoaderService } from 'src/app/shared/loading-wrapper/loader.service';
+import { AppConfigService, AppSetting } from 'src/app/services/app-config.service';
 
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
   styleUrls: ['./schedule.component.css']
 })
-export class ScheduleComponent {
+export class ScheduleComponent implements OnInit {
   selectorOptions: Option<string>[];
   timerOptions: Option<string>[];
   workModeOptions: Option<string>[];
   scheduleForm: FormGroup;
   selectedWorkMode = WorkMode.Queue;
   selectedWatchMode = TimerOption.Stopwatch;
-  timerSetting = TimeUnit.None;
+  timeUnit = TimeUnit.None;
   touched: boolean = false;
 
   /**
    *
    */
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private loader: LoaderService, private settingsServ: AppConfigService) {
     this.scheduleForm = this.fb.group({
       workMode: new FormControl(WorkMode.Queue),
-      timerMode: new FormControl(TimeUnit.None),
+      timeUnit: new FormControl(TimeUnit.None),
       timerWorkMode: new FormControl(TimerOption.Stopwatch),
       interval: new FormControl(10),
-      StartDate: new FormControl(new Date().toLocaleDateString()),
-      TimeInit: new FormControl('00:00'),
-      TimeEnd: new FormControl('23:59'),
+      startDate: new FormControl(new Date().toLocaleDateString()),
+      timeInit: new FormControl('00:00'),
+      timeEnd: new FormControl('23:59'),
       enableSecondQueue: new FormControl(true)
     })
     this.selectorOptions = EnumToList(TimeUnit) as unknown as Option<string>[];
@@ -44,6 +46,16 @@ export class ScheduleComponent {
 
       }
     })
+
+  }
+  ngOnInit(): void {
+    this.loader.setLoading(true)
+    this.settingsServ.getConfig().then((payload) => {
+      this.loader.setLoading(false)
+      this.timeUnit = payload.timeUnit;
+      this.scheduleForm.patchValue(payload)
+    })
+
   }
 
   isStoptWatchMode = () => {
@@ -71,7 +83,12 @@ export class ScheduleComponent {
   }
 
   onSave = () => {
-    console.log(this.scheduleForm.getRawValue())
+    let updateSettings: AppSetting = this.scheduleForm.getRawValue()
+    this.loader.setLoading(true);
+    this.settingsServ.saveChange(updateSettings).then(() => {
+      this.loader.setLoading(false)
+      this.touched = false;
+    })
   }
 
   onCancel = () => {

@@ -11,6 +11,10 @@ import { WorkflowsComponent } from './components/workflows/workflows.component';
 import { RulesComponent } from './components/rules/rules.component';
 import { DocumentTypesComponent } from './components/document-types/document-types.component';
 import { SharedModule } from '../shared/shared.module';
+import { QueueComponent } from './components/queue/queue.component';
+import { QueueService } from '../services/queue.service';
+import { LoaderService } from '../shared/loading-wrapper/loader.service';
+import { AppConfigService } from '../services/app-config.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,8 @@ import { SharedModule } from '../shared/shared.module';
     ScheduleComponent,
     WorkflowsComponent,
     RulesComponent,
-    DocumentTypesComponent
+    DocumentTypesComponent,
+    QueueComponent
   ],
   imports: [
     CommonModule,
@@ -28,6 +33,7 @@ import { SharedModule } from '../shared/shared.module';
     ReactiveFormsModule,
     TranslateModule.forChild(),
     SharedModule
-  ]
+  ],
+  providers: [QueueService, LoaderService, AppConfigService]
 })
 export class ConfigurationModule { }

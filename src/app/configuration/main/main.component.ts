@@ -9,4 +9,5 @@ export class MainComponent {
   scheduleActive: string | boolean = "";
   workfolowsActive: string | boolean = ""
   rulesActive: string | boolean = ""
+  queueActive: string | boolean = ""
 }

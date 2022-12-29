@@ -1,7 +1,7 @@
 export enum TimeUnit {
     None = 'None',
     Seconds = 'Seconds',
-    Munites = 'Minutes',
+    Minutes = 'Minutes',
     Hours = 'Hours',
     Days = 'Days',
     Week = 'Weeks'

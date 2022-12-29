@@ -13,6 +13,8 @@ import { RouterModule } from '@angular/router';
 import { SelectorComponent } from './selector/selector.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RadioListComponent } from './radio-list/radio-list.component';
+import { LoadingWrapperComponent } from './loading-wrapper/loading-wrapper.component';
+import { LoaderService } from './loading-wrapper/loader.service';
 ClarityIcons.addIcons(userIcon, vmwAppIcon, cogIcon, toolsIcon, searchIcon)
 
 @NgModule({
@@ -22,6 +24,7 @@ ClarityIcons.addIcons(userIcon, vmwAppIcon, cogIcon, toolsIcon, searchIcon)
     LayoutComponent,
     SelectorComponent,
     RadioListComponent,
+    LoadingWrapperComponent,
   ],
   imports: [
     CommonModule,
@@ -37,7 +40,9 @@ ClarityIcons.addIcons(userIcon, vmwAppIcon, cogIcon, toolsIcon, searchIcon)
     LayoutComponent,
     TranslateModule,
     SelectorComponent,
-    RadioListComponent
-  ]
+    RadioListComponent,
+    LoadingWrapperComponent
+  ],
+  providers: [LoaderService]
 })
 export class SharedModule { }
