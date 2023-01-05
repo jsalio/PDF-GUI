@@ -8,32 +8,15 @@ import { WorkMode } from '../shared/models/WorkMode';
   providedIn: 'root'
 })
 export class AppConfigService {
-
+  server: string = "https://localhost:44353/api/ServiceSetting";
   constructor(private http: HttpClient) { }
 
   getConfig = () => {
-    return new Promise<AppSetting>((resolve, reject) => {
-      setTimeout(() => {
-        resolve({
-          workMode: WorkMode.Timer,
-          enableSecondQueue: true,
-          timerWorkMode: TimerOption.Stopwatch,
-          timeUnit: TimeUnit.Minutes,
-          interval: 3,
-          startDate: '',
-          timeInit: '',
-          timeEnd: ''
-        } as AppSetting)
-      }, 5000);
-    })
+    return this.http.get(`${this.server}/service-settings`).toPromise() as Promise<AppSetting>
   }
 
   saveChange = (updatedSettings: AppSetting) => {
-    return new Promise<AppSetting>((resolve, reject) => {
-      setTimeout(() => {
-        resolve(updatedSettings)
-      }, 5000)
-    })
+    return this.http.post(`${this.server}/save`, updatedSettings).toPromise()
   }
 }
 

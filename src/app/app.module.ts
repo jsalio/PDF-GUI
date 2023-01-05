@@ -13,6 +13,10 @@ import { HttpClientModule } from "@angular/common/http";
 import { RouterModule } from '@angular/router';
 import { BlockUIModule } from 'ng-block-ui';
 import { LoaderService } from './shared/loading-wrapper/loader.service';
+import { NotificationService } from './shared/notification/notification.service';
+import { ToastrModule } from 'ngx-toastr';
+
+
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -30,6 +34,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     SharedModule,
     HttpClientModule,
+    ToastrModule.forRoot(),
     TranslateModule.forRoot({
       defaultLanguage: 'es',
       loader: {
@@ -39,7 +44,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [LoaderService],
+  providers: [LoaderService, NotificationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

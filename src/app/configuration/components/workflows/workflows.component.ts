@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { WorkflowService } from 'src/app/services/workflow.service';
 import { Workflow } from 'src/app/shared/models/Workflow';
 import { search } from 'src/app/shared/utils/search';
 
@@ -7,32 +8,27 @@ import { search } from 'src/app/shared/utils/search';
   templateUrl: './workflows.component.html',
   styleUrls: ['./workflows.component.css']
 })
-export class WorkflowsComponent {
+export class WorkflowsComponent implements OnInit {
 
-  workflows: Array<Workflow> = [
-    {
-      id: 4,
-      name: 'Workflow 4',
-      volId: 1
-    }
-  ];
-  available: Array<Workflow> = [
-    {
-      id: 1,
-      name: 'Workflow 1',
-      volId: 1
-    },
-    {
-      id: 2,
-      name: 'Workflow 2',
-      volId: 1
-    },
-    {
-      id: 3,
-      name: 'Workflow 3',
-      volId: 1
-    }
-  ];
+  /**
+   *
+   */
+  constructor(private workflowSvr: WorkflowService) {
+
+  }
+
+  ngOnInit(): void {
+    this.workflowSvr.loadActiveElements().then((list) => {
+      this.workflows = list
+      this.workflowSvr.loadAvailable().then((dataSet) => {
+        this.available = dataSet.filter(x => !list.map(y => y.name).includes(x.name))
+      }).catch(() => { })
+    }).catch(() => { })
+  }
+
+  workflows: Array<Workflow> = []
+  available: Array<Workflow> = [];
+  loading = false
 
   filteredLeft: Array<Workflow> = [];
   filteredRight: Array<Workflow> = [];
@@ -94,6 +90,10 @@ export class WorkflowsComponent {
       }
     }
     filterField[field]();
+  }
+
+  onSaveChange = () => {
+    this.workflowSvr.saveChanges(this.workflows).then(() => { }).catch(() => { })
   }
 
 }

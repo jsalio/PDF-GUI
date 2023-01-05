@@ -15,6 +15,7 @@ import { QueueComponent } from './components/queue/queue.component';
 import { QueueService } from '../services/queue.service';
 import { LoaderService } from '../shared/loading-wrapper/loader.service';
 import { AppConfigService } from '../services/app-config.service';
+import { NotificationService } from '../shared/notification/notification.service';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,6 @@ import { AppConfigService } from '../services/app-config.service';
     TranslateModule.forChild(),
     SharedModule
   ],
-  providers: [QueueService, LoaderService, AppConfigService]
+  providers: [QueueService, LoaderService, AppConfigService, NotificationService]
 })
 export class ConfigurationModule { }

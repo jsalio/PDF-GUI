@@ -5,26 +5,15 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class QueueService {
-
+  server: string = "https://localhost:44353/api/queue";
   constructor(private http: HttpClient) { }
 
-  getQueue = () => {
-    return new Promise<QueueConfiguration>((result, reject) => {
-      setTimeout(() => {
-        result({
-          server: 'localhost',
-          queueName: 'PDFTransformation',
-          exchange: 'CapturePDFExchange',
-          username: 'guest',
-          password: 'guest',
-          virtualhost: '/',
-          port: 5672,
-          prefetch: 5,
-          prefetchSize: 5,
-          heartbeat: 5
-        } as QueueConfiguration)
-      }, 5000)
-    })
+  getQueue = (): Promise<QueueConfiguration> => {
+    return this.http.get(`${this.server}/queue-settings`).toPromise() as Promise<QueueConfiguration>
+  }
+
+  saveChanges = (queue: QueueConfiguration): Promise<QueueConfiguration> => {
+    return this.http.post(`${this.server}/save`, queue).toPromise() as Promise<QueueConfiguration>
   }
 }
 
@@ -34,7 +23,7 @@ export interface QueueConfiguration {
   exchange: string
   username: string,
   password: string,
-  virtualhost: string,
+  virtualHost: string,
   port: number,
   prefetchSize: number,
   prefetch: number,

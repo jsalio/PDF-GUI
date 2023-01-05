@@ -7,6 +7,9 @@ import { Option } from 'src/app/shared/selector/selector.component';
 import { EnumToList } from 'src/app/shared/utils/enumToList';
 import { LoaderService } from 'src/app/shared/loading-wrapper/loader.service';
 import { AppConfigService, AppSetting } from 'src/app/services/app-config.service';
+import { NotificationService, ToastType } from 'src/app/shared/notification/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { buildErrorResponse } from 'src/app/shared/models/error-handler';
 
 @Component({
   selector: 'app-schedule',
@@ -14,10 +17,10 @@ import { AppConfigService, AppSetting } from 'src/app/services/app-config.servic
   styleUrls: ['./schedule.component.css']
 })
 export class ScheduleComponent implements OnInit {
-  selectorOptions: Option<string>[];
-  timerOptions: Option<string>[];
-  workModeOptions: Option<string>[];
-  scheduleForm: FormGroup;
+  selectorOptions: Option<string>[] = [];
+  timerOptions: Option<string>[] = [];
+  workModeOptions: Option<string>[] = [];
+  scheduleForm: FormGroup = undefined as any;
   selectedWorkMode = WorkMode.Queue;
   selectedWatchMode = TimerOption.Stopwatch;
   timeUnit = TimeUnit.None;
@@ -26,7 +29,27 @@ export class ScheduleComponent implements OnInit {
   /**
    *
    */
-  constructor(private fb: FormBuilder, private loader: LoaderService, private settingsServ: AppConfigService) {
+  constructor(private fb: FormBuilder, private loader: LoaderService, private settingsServ: AppConfigService, private notify: NotificationService) {
+  }
+
+
+  ngOnInit(): void {
+    this.buildForm()
+    this.loader.setLoading(true)
+    this.settingsServ.getConfig().then((payload) => {
+      this.loader.setLoading(false)
+      this.timeUnit = payload.timeUnit;
+      this.scheduleForm.patchValue(payload)
+    })
+      .catch((message) => {
+        console.log(message)
+        this.loader.setLoading(false)
+        this.showNotification("Error when try to save", "", ToastType.Error)
+      })
+
+  }
+
+  buildForm = () => {
     this.scheduleForm = this.fb.group({
       workMode: new FormControl(WorkMode.Queue),
       timeUnit: new FormControl(TimeUnit.None),
@@ -43,19 +66,8 @@ export class ScheduleComponent implements OnInit {
     this.scheduleForm.statusChanges.subscribe((p) => {
       if (this.scheduleForm.dirty) {
         this.touched = true;
-
       }
     })
-
-  }
-  ngOnInit(): void {
-    this.loader.setLoading(true)
-    this.settingsServ.getConfig().then((payload) => {
-      this.loader.setLoading(false)
-      this.timeUnit = payload.timeUnit;
-      this.scheduleForm.patchValue(payload)
-    })
-
   }
 
   isStoptWatchMode = () => {
@@ -88,11 +100,21 @@ export class ScheduleComponent implements OnInit {
     this.settingsServ.saveChange(updateSettings).then(() => {
       this.loader.setLoading(false)
       this.touched = false;
+      this.showNotification("ConfigurationSavesd", "Info", ToastType.Info)
     })
+      .catch((error: HttpErrorResponse) => {
+        this.loader.setLoading(false)
+        let details = buildErrorResponse(error)
+        this.showNotification(details.message as any, error.status.toString(), ToastType.Error)
+      })
   }
 
   onCancel = () => {
     this.touched = false
+  }
+
+  showNotification = (message: string, title: string, type: ToastType) => {
+    this.notify.show({ message: message, title: title }, type)
   }
 
 }
