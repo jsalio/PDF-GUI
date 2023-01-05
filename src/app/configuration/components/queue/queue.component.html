@@ -7,7 +7,7 @@
 <div clrForm [formGroup]="queueForm">
     <clr-input-container>
         <label>{{'Server'|translate}}</label>
-        <input formControlName="server" clrInput type="text" />
+        <input formControlName="serverUrl" clrInput type="text" />
     </clr-input-container>
     <clr-input-container>
         <label>{{'QueueName'|translate}}</label>
@@ -31,7 +31,7 @@
     <div *ngIf="showAdvance">
         <clr-input-container>
             <label>{{'Virtualhost'|translate}}</label>
-            <input formControlName="virtualHost" formControlName="server" clrInput type="text" name="example" />
+            <input formControlName="virtualHost" formControlName="serverUrl" clrInput type="text" name="example" />
         </clr-input-container>
         <clr-input-container>
             <label>{{'Port'|translate}}</label>
@@ -43,7 +43,7 @@
         </clr-input-container>
         <clr-input-container>
             <label>{{'PrefetchCount'|translate}}</label>
-            <input formControlName="prefetch" clrInput type="number" maxlength="3" name="example" />
+            <input formControlName="prefetchCount" clrInput type="number" maxlength="3" name="example" />
         </clr-input-container>
         <clr-input-container>
             <label>{{'Heartbeat'| translate}}</label>

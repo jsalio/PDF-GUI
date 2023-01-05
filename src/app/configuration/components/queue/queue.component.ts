@@ -17,19 +17,20 @@ export class QueueComponent {
    */
   constructor(private fb: FormBuilder, private queueSrv: QueueService, private loader: LoaderService, private notify: NotificationService) {
     this.queueForm = this.fb.group({
-      server: this.buildNewControl('Sample', [Validators.required, Validators.maxLength(15)]),
-      queueName: this.buildNewControl('sample', [Validators.required, Validators.maxLength(15)]),
-      exchange: this.buildNewControl('sample exchange', [Validators.required]),
-      username: this.buildNewControl('sample user', [Validators.required]),
-      password: this.buildNewControl('sample password', [Validators.required]),
-      virtualHost: this.buildNewControl(5672, [Validators.required]),
-      port: this.buildNewControl(5672, [Validators.required]),
-      prefetchSize: this.buildNewControl(10, [Validators.required]),
-      prefetch: this.buildNewControl(10, [Validators.required]),
-      heartbeat: this.buildNewControl(1, [Validators.required]),
+      serverUrl: this.buildNewControl('', [Validators.required, Validators.maxLength(50)]),
+      queueName: this.buildNewControl('', [Validators.required, Validators.maxLength(50)]),
+      exchange: this.buildNewControl('', [Validators.required, Validators.maxLength(50)]),
+      username: this.buildNewControl('', [Validators.required]),
+      password: this.buildNewControl('', [Validators.required]),
+      virtualHost: this.buildNewControl('', [Validators.required]),
+      port: this.buildNewControl(0, [Validators.required]),
+      prefetchSize: this.buildNewControl(0, [Validators.required]),
+      prefetchCount: this.buildNewControl(0, [Validators.required]),
+      heartbeat: this.buildNewControl(0, [Validators.required]),
     })
     this.loader.setLoading(true)
     this.queueSrv.getQueue().then((cfg) => {
+      debugger
       this.queueForm.patchValue(cfg)
       this.loader.setLoading(false)
     })

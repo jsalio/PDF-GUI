@@ -18,7 +18,7 @@ export class QueueService {
 }
 
 export interface QueueConfiguration {
-  server: string
+  serverUrl: string
   queueName: string
   exchange: string
   username: string,
@@ -26,6 +26,6 @@ export interface QueueConfiguration {
   virtualHost: string,
   port: number,
   prefetchSize: number,
-  prefetch: number,
+  prefetchCount: number,
   heartbeat: number,
 }
